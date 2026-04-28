@@ -23,3 +23,17 @@ jobs:
 
       - name: Rodar testes
         run: pytest test_imc.py
+
+      - name: Notificar Discord - Sucesso
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d "{\"content\": \"✅ CI passou com sucesso no repositório calc_imc_python!\"}" \
+          ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notificar Discord - Falha
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d "{\"content\": \"❌ CI falhou no repositório calc_imc_python! Verifique os testes.\"}" \
+          ${{ secrets.DISCORD_WEBHOOK }}
